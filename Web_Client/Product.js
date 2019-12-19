@@ -396,6 +396,44 @@ async function logout() {
     }
 }
 
+async function register(){
+  const url = `${BASE_URL}login/register`
+
+  // Get form fields
+  const firstname = document.getElementById('firstname').value;
+  const lastname = document.getElementById('lastname').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+ 
+
+  // build request body
+  const reqBody = JSON.stringify({
+  firstName: firstname,
+  lastName: lastname,
+  email: email,
+  password:password
+ 
+  }); 
+  try {
+    const json = await postOrPutDataAsync(url, reqBody, 'POST');
+    console.log("response: " + json.user);
+
+    // A successful login will return a user
+    if (json.user != false) {
+      // If a user then record in session storage
+      sessionStorage.loggedIn = true;
+      
+      // force reload of page
+      location.reload(true);
+    }
+
+    // catch and log any errors
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+
 function userLoggedIn() {
 
   if (sessionStorage.loggedIn == 'true' ) {
