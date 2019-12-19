@@ -1,0 +1,22 @@
+{
+    "connection":{
+        "user" : "User1",
+        "password": "Qwerty123",
+        "server" : "sswd-dbca.database.windows.net",
+        "database" : "SSWD-DB",
+        "parseJSON": true,
+        "options":
+        {
+            "encrypt" : true
+        },
+        "pool":
+        {
+        "min": 2,
+        "max": 4,
+        "idleTimeoutMillis": 30000
+        }
+    },
+    "keys":{
+        "secret":"key should be atleast 64 chars"
+    }
+}
