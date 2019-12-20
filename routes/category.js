@@ -71,7 +71,7 @@ router.get('/:id', async (req, res) => {
 
         // Send response with JSON result    
         res.json(result.recordset)
-
+        // Catching any error if try doesnt excute
         } catch (err) {
             res.status(500)
             res.send(err.message)

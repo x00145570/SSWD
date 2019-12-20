@@ -1,3 +1,4 @@
+// libraries
 const router = require('express').Router();
 
 const jwt = require('jsonwebtoken');
@@ -27,6 +28,30 @@ const SQL_SELECT_BY_CATID = 'SELECT * FROM dbo.Product WHERE CategoryId = @id OR
 const SQL_INSERT = 'INSERT INTO dbo.Product (CategoryId, ProductName, ProductDescription, ProductStock, ProductPrice) VALUES (@categoryId, @productName, @productDescription, @ProductStock, @ProductPrice); SELECT * from dbo.Product WHERE ProductId = SCOPE_IDENTITY();';
 const SQL_UPDATE = 'UPDATE dbo.Product SET CategoryId = @categoryId, ProductName = @productName, ProductDescription = @productDescription, ProductStock = @ProductStock, ProductPrice = @ProductPrice WHERE ProductId = @id; SELECT * FROM dbo.Product WHERE ProductId = @id;';
 const SQL_DELETE = 'DELETE FROM dbo.Product WHERE ProductId = @id;';
+
+// SQL Statement for serach bar
+const SEARCH_BY_NAME = "SELECT * from dbo.Product WHERE ProductName LIKE CONCAT ('%', @key, '%') for json path;";
+
+// Whenever a product name is being passed into the search bar, it will be passed to this endpoint and return back 
+// all the products that the user had entered into the search bar
+router.get('/search/:key', async(req, res) =>{
+    
+    const key = req.params.key;
+    // "%' + req..... + '%"'
+    
+    try{
+        // Getting connection to the database
+        const pool = await dbConnPoolPromise
+        const result = await pool.request()
+                .input('key', sql.NVarChar, key)
+                .query(SEARCH_BY_NAME);
+                
+                res.json(result.recordset[0]); 
+
+} catch(err){
+    res.status(500);
+    res.send(err.message);
+}});
 
 
 // GET listing of all products

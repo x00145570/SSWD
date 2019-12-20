@@ -93,15 +93,6 @@ async (req, res) => {
   }
 });
 
-/*
-router.get('/test/test',
-passport.authenticate('jwt', { session: false}),
-(req, res) => {
-  console.log(`** protected: ${req.user}`);
-
-  res.status(200).send({ "message": req.user});
-});
-*/
 
 
 module.exports = router;

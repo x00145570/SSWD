@@ -28,3 +28,7 @@ UPDATE dbo.Product SET ProductName = 'Xbox One X Robot White Special Edition Fal
 SELECT * FROM Product
 
 update [dbo].[AppUser] set FirstName = 'Test', LastName = 'Test', Email = 'test@web.com' where UserId = 1
+
+select * from Category
+
+delete dbo.Category where CategoryId = 5

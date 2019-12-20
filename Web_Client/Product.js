@@ -143,9 +143,9 @@ function displayProducts(products) {
     
       // If user logged in then show edit and delete buttons
       // To add - check user role        
-      if (userLoggedIn() === true) {      
-          row+= `<td><button class="btn btn-xs" data-toggle="modal" data-target="#ProductFormDialog" onclick="prepareProductUpdate(${product.ProductId})">Update</button></td>
-                 <td><button class="btn btn-xs" onclick="deleteProduct(${product.ProductId})">Delete</span></button></td>`
+      if (userLoggedIn() === true && sessionStorage.role === "admin") { 
+          row+= `<td><button class="btn" data-toggle="modal" data-target="#ProductFormDialog" onclick="prepareProductUpdate(${product.ProductId})"><span class="fa fa-pencil"></span></button></td>
+                 <td><button class="btn" onclick="deleteProduct(${product.ProductId})"><span class="fa fa-trash"></span></button></td>`
       }
       row+= '</tr>';
 
@@ -207,7 +207,9 @@ async function prepareProductUpdate(id) {
       // Get broduct by id
       const product = await getDataAsync(`${BASE_URL}product/${id}`);
       // Fill out the form
-      document.getElementById('productId').value = product.ProductId; // uses a hidden field - see the form
+      document.getElementById('productId').value = product.ProductId;
+      console.log("value = " +  document.getElementById('productId').value);
+      // uses a hidden field - see the form
       document.getElementById('categoryId').value = product.CategoryId;
       document.getElementById('productName').value = product.ProductName;
       document.getElementById('productDescription').value = product.ProductDescription;
@@ -226,7 +228,10 @@ async function addOrUpdateProduct() {
   let url = `${BASE_URL}product`
 
   // Get form fields
-  const pId = Number(document.getElementById('productId').value);
+  
+  const pId = document.getElementById('productId').value; 
+  // checking the value, making sure it updates right one 
+  console.log("value = " +  document.getElementById('productId').value);
   const catId = document.getElementById('categoryId').value;
   const pName = document.getElementById('productName').value;
   const pDesc = document.getElementById('productDescription').value;
@@ -255,6 +260,7 @@ async function addOrUpdateProduct() {
           json = await postOrPutDataAsync(url, reqBody, 'POST');
       }
     // Load products
+    document.getElementById('productId').value = 0;
     loadProducts();
     // catch and log any errors
   } catch (err) {
@@ -290,7 +296,7 @@ function showAddProductButton() {
 
 let addProductButton= document.getElementById('AddProductButton');
 
-if (userLoggedIn() === true) {
+if (userLoggedIn() === true && sessionStorage.role === "admin") {
   addProductButton.style.display = 'block';
 }
 else {
@@ -322,12 +328,14 @@ function showLoginLink() {
     link.removeAttribute('data-toggle');
     link.removeAttribute('data-target');
     link.addEventListener("click", logout);
+    document.getElementById("registerLink").setAttribute('hidden', 'true');
   }
   else {
     link.innerHTML = 'Login';
     link.setAttribute('data-toggle', 'modal');
     link.setAttribute('data-target', '#LoginDialog');
-    //link.addEventListener('click', login);
+    document.getElementById("registerLink").removeAttribute('hidden');
+    // link.addEventListener('click', login);
   }
 
 }
@@ -353,9 +361,11 @@ async function login() {
     console.log("response: " + json.user);
 
     // A successful login will return a user
-    if (json.user != false) {
+    if (json.user != false || json.user !== undefined) {
+
       // If a user then record in session storage
       sessionStorage.loggedIn = true;
+      sessionStorage.role = json.role;
       
       // force reload of page
       location.reload(true);
@@ -382,6 +392,7 @@ async function logout() {
 
     // forget user in session storage
     sessionStorage.loggedIn = false;
+    sessionStorage.role = "";
 
     // force reload of page
     location.reload(true);
@@ -395,40 +406,35 @@ async function logout() {
       return err;
     }
 }
-
+// register is passed, when the register button is clicked . it runs this function
 async function register(){
   const url = `${BASE_URL}login/register`
 
   // Get form fields
-  const firstname = document.getElementById('firstname').value;
-  const lastname = document.getElementById('lastname').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const fname = document.getElementById('firstname').value;
+  const lname = document.getElementById('lastname').value;
+  const em = document.getElementById('regemail').value;
+  const pwd = document.getElementById('password1').value;
  
 
   // build request body
   const reqBody = JSON.stringify({
-  firstName: firstname,
-  lastName: lastname,
-  email: email,
-  password:password
+  firstName: fname,
+  lastName: lname,
+  email: em,
+  password:pwd
  
   }); 
+
   try {
     const json = await postOrPutDataAsync(url, reqBody, 'POST');
-    console.log("response: " + json.user);
-
-    // A successful login will return a user
-    if (json.user != false) {
-      // If a user then record in session storage
-      sessionStorage.loggedIn = true;
-      
-      // force reload of page
-      location.reload(true);
-    }
+  // alert(fname + " " + lname + " has been registered!");
+  alert(JSON.stringify(json));
+ console.log("Response: " + json);
 
     // catch and log any errors
   } catch (err) {
+    // alert();
     console.log(err);
     return err;
   }
@@ -445,3 +451,62 @@ function userLoggedIn() {
 }
 
 // END OF USER.JS
+
+
+// script
+
+ //showpassword
+ function myFunction() {
+   // matching the id password
+  var x = document.getElementById("password");
+  // if type = password then change it to text else leave it to password
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+};
+
+//  showpassword2
+ function myFunction2() {
+  // matching the id password1
+  var x = document.getElementById("password1");
+  // if type = password then change it to text else leave it to password
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+};
+
+// search bar
+async function searchProduct(){
+    
+  // Retrieve the keyword input from the search bar
+  let productName = document.getElementById("search").value;
+  // Pass that keyword into the url endpoint
+  const url = `${BASE_URL}product/search/${productName}`;
+
+  // Pass it on then to the request body
+  const request = {
+      method:'GET',
+      headers:HTTP_REQ_HEADERS,
+      mode:'cors'
+  }
+  // Fetch the reponse 
+  const response = await fetch(url, request);
+  // Converts the response in json format
+  const json = await response.json();
+
+  // If the response is 200 ok, go into this if statement
+  if(response.ok){
+      console.log(`${productName} has been found`);
+      // Call the display method and pass in the json variable
+      // And it will display the specific product content for the user
+      displayProducts(json);
+  } else {
+      console.log(`We could not find ${productName}`);
+  }
+}
+
+document.getElementById("searchBtn").addEventListener("click",searchProduct);

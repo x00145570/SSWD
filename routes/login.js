@@ -62,7 +62,7 @@ router.post('/auth', (req, res) => {
 
         // add the jwt to the cookie and send
         res.cookie('jwt', token, { httpOnly: true, secure: false });
-        res.status(200).send({ "user": user.Email, token });
+        res.status(200).send({ "user": user.Email, "role":user.Role, token });
       });
     },
   )(req, res);
@@ -95,26 +95,27 @@ router.post('/register', async (req, res) => {
   // Validate - this string, inially empty, will store any errors
   let errors = "";
 
-  // Make sure that first name is text
+// validation check 
   const firstName = req.body.firstName;
   if (firstName === "") {
-    errors += "invalid first name; ";
+   
+    errors += "invalid first name ";
   }
   // Make sure that last name is text
   const lastName = req.body.lastName;
   if (lastName === "") {
-    errors += "invalid last name; ";
+    errors += "invalid last name";
   }
   // validate email
   const email = req.body.email;
-  if (!validator.isEmail(email)) {
-    errors += "invalid email; ";
+  if (email === "") {
+    errors += "invalid email ";
   }
   // validate password
   let password = req.body.password;
   // use a regukar expression to check for allowed chars in password
   if (password === "") {
-    errors += "invalid password; ";
+    errors += "invalid password";
   }
 
 

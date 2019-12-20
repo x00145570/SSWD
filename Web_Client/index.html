@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./style.css">
-  <title>GameStore</title>
+  <title>Console & PC</title>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
         <div class="container">
-            <a class="navbar-brand" href="#">GameStore</a>
+            <a class="navbar-brand" href="#">Console & PC </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -33,12 +33,15 @@
                     <li class="nav-item">
                         <a id="registerLink" class="nav-link" data-toggle="modal" data-target="#registerDialog">Register</a>
                     </li>
-                    
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2"  placeholder="Search" aria-label="Search" id="search">
+                        <button class="btn btn-outline-warning my-2 my-sm-0" type="button" id="searchBtn">Search</button>
+                      </form>
                 </ul>
             </div>
         </div>
     </nav>
-
+<!-- //category  -->
     <div class="container">
         <div class="row">
             <h2 class="mt-5">Products by Category</h2>
@@ -73,7 +76,9 @@
 
             </div>
         </div>
+<!-- End of category  -->
 
+<!-- Start of login  -->
 <!-- Bootstrap Modals -->
 
         <!-- Login Dialog Modal -->
@@ -96,6 +101,8 @@
                             <div class="form-group">
                                 <label for="pwd">Password:</label>
                                 <input type="password" class="form-control" id="password">
+                                <input type="checkbox" onclick="myFunction()">Show Password
+           
                             </div>
                     </div>
 
@@ -103,7 +110,7 @@
                     <div class="modal-footer">
                             <button onclick="login()" type="button" class="btn btn-primary" data-dismiss="modal">Login</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
+                                     </div>
 
                 </div>
             </div>
@@ -133,19 +140,25 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="email">Email address:</label>
-                        <input type="email" class="form-control" id="email">
+                        <label for="email">Email Address:</label>
+                        <input type="email" class="form-control" id="regemail">
                     </div>
+
                         <div class="form-group">
                             <label for="pwd">Password:</label>
-                            <input type="password" class="form-control" id="password">
+                            
+                            <input type="password" class="form-control" id="password1">
+                            <input type="checkbox" onclick="myFunction2()">Show Password 
+               
                         </div>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                        <button onclick="register()" type="button" class="btn btn-primary" data-dismiss="modal">register</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      
+                    <button onclick="register()" type="button" class="btn btn-primary" data-dismiss="modal">register</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
                 </div>
 
             </div>
@@ -203,6 +216,7 @@
 
     </div>
 
+    <!-- script src and  link for bootstrap and link to product.js  -->
     <script src="./Product.js"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -216,6 +230,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </body>
 
 </html>
